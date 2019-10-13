@@ -1,0 +1,17 @@
+ext.versioning = [
+        majorVersion: 1,
+        minorVersion: 0,
+        patchVersion: 0
+]
+
+ext.generateVersionCode = {
+    return versioning.majorVersion * 1000000 +
+            versioning.minorVersion * 1000 +
+            versioning.patchVersion
+}
+
+ext.generateVersionName = {
+    return "${versioning.majorVersion}." +
+            "${versioning.minorVersion}." +
+            "${versioning.patchVersion}"
+}

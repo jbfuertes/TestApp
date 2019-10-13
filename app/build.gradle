@@ -1,0 +1,128 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlinx-serialization'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.appetiser.testapp"
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+
+        // Major -> Millions, Minor -> Thousands, Patch -> Hundreds. E.g 1.3.72 == 1,003,072
+        versionCode generateVersionCode()
+        versionName generateVersionName()
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        //For blurring library
+        renderscriptTargetApi project.ext.targetSdkVersion
+        renderscriptSupportModeEnabled true
+
+        buildConfigField 'String', 'BASE_URL', '"https://sticky.whitecloak.io/"'
+    }
+
+    buildTypes {
+        debug {
+
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'environment'
+
+    productFlavors {
+        dev {
+            dimension 'environment'
+            buildConfigField 'String', 'BASE_URL', '"https://itunes.apple.com/"'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+}
+
+dependencies {
+
+    def kotlinDependencies = rootProject.ext.kotlinDependencies
+    def supportDependencies = rootProject.ext.supportDependencies
+    def coreDependencies = rootProject.ext.coreDependencies
+    def lifecycleDependencies = rootProject.ext.lifecycleDependencies
+    def navigationDependencies = rootProject.ext.navigationDependencies
+    def daggerDependencies = rootProject.ext.daggerDependencies
+    def retrofitDependencies = rootProject.ext.retrofitDependencies
+    def rxDependencies = rootProject.ext.rxDependencies
+    def testDependencies = rootProject.ext.testDependencies
+    def debuggingDependencies = rootProject.ext.debuggingDependencies
+    def viewDependencies = rootProject.ext.viewDependencies
+    def imageDependencies = rootProject.ext.imageDependencies
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation kotlinDependencies.kotlin
+    implementation kotlinDependencies.serializationRuntime
+    implementation kotlinDependencies.optional
+    implementation kotlinDependencies.optionalRx
+
+    implementation supportDependencies.material
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.fragment
+    implementation supportDependencies.fragmentKtx
+    implementation supportDependencies.multidex
+    implementation supportDependencies.constraintLayout
+    implementation supportDependencies.activity
+    implementation supportDependencies.swipeRefresh
+
+    implementation coreDependencies.coreKtx
+
+    implementation lifecycleDependencies.extensions
+    implementation lifecycleDependencies.transformation
+
+    implementation navigationDependencies.uiKtx
+    implementation navigationDependencies.fragmentKtx
+    implementation navigationDependencies.commonKtx
+
+    implementation daggerDependencies.dagger
+    implementation daggerDependencies.daggerSupport
+    kapt daggerDependencies.daggerCompiler
+    kapt daggerDependencies.daggerProcessor
+
+    implementation retrofitDependencies.retrofit
+    implementation retrofitDependencies.retrofitAdapter
+    implementation retrofitDependencies.kotlinxSerializationConverter
+
+    implementation rxDependencies.rxJava2
+    implementation rxDependencies.rxAndroid2
+    implementation rxDependencies.rxKotlin
+    implementation rxDependencies.rxBinding3
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.core
+    testImplementation testDependencies.runner
+
+    implementation debuggingDependencies.timber
+    implementation debuggingDependencies.interceptor
+
+    implementation viewDependencies.epoxyRecyclerView
+    kapt viewDependencies.epoxyRecyclerViewKapt
+    implementation viewDependencies.shimmer
+
+    implementation imageDependencies.picasso
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
+}

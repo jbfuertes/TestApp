@@ -1,0 +1,20 @@
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+task generateVersionCode {
+    doLast{
+        println 'VersionCode: ' + generateVersionCode()
+    }
+}
+
+task generateVersionName {
+    doLast{
+        println 'VersionName: ' + generateVersionName()
+    }
+}
+
+// Log out test results to console
+tasks.matching { it instanceof Test }.all {
+    testLogging.events = ["failed", "passed", "skipped"]
+}
